@@ -1,5 +1,5 @@
 use std::fs::File;
-use std::io::{BufRead, BufReader};// , Result};
+use std::io::{BufRead, BufReader};
 
 fn main() -> std::io::Result<()> {
     let mut file = File::open("day01.txt")?;
