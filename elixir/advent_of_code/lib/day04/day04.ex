@@ -4,6 +4,7 @@ defmodule AdventOfCode.Day04 do
 
   Repose Record.
   Part 1: Find the guard that has the most minutes of sleep.
+  Part 2: Find the guard and the minute that has the highest frequency of slept time.
   """
   @day4 Path.join(["day04.txt"])
 
@@ -24,6 +25,30 @@ defmodule AdventOfCode.Day04 do
       guard_minutes
       |> Map.to_list()
       |> Enum.sort_by(fn {_min, frequency} -> frequency end)
+      |> List.last()
+
+    id * minute
+  end
+
+  def part2 do
+    data =
+      File.stream!(@day4, [], :line)
+      |> Stream.map(&String.trim/1)
+      |> Enum.sort()
+      |> Enum.map(&parse_input/1)
+
+    {id, {minute, _freq}} =
+      get_minutes(data, 0, %{}, nil)
+      |> Map.to_list()
+      |> Enum.map(fn {id, %{guard_minutes: minutes} = _guard_map} ->
+        max_minute =
+          minutes
+          |> Map.to_list()
+          |> Enum.sort_by(fn {m, f} -> f end)
+          |> List.last()
+        {id, max_minute}
+      end)
+      |> Enum.sort_by(fn {id, {minute, freq}} -> freq end)
       |> List.last()
 
     id * minute
